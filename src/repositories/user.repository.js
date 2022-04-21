@@ -9,7 +9,9 @@ export default {
 
   find: async (uuid) => await models.User.findOne({ where: { uuid: Buffer(uuid, 'hex') } }),
 
-  findById: async (id) => await models.User.findByPk(id)
+  findById: async (id) => await models.User.findByPk(id),
+
+  findByEmail: async (email) => await models.User.findOne({ where : { email } })
 
   // update
   // delete
