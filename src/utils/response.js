@@ -1,6 +1,9 @@
 const httpStatus = require('http-status');
 
-export default (req, data = {}, code = httpStatus.OK) => {
+export default (res, data = {}, code = httpStatus.OK) => {
+
+  res.status(code).json({ data })
+/*
   let result = { success: true }
 
   if (code > 399) {
@@ -12,4 +15,5 @@ export default (req, data = {}, code = httpStatus.OK) => {
   }
 
   return result.status(code).json(result)
+*/
 }

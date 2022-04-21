@@ -13,7 +13,7 @@ const login = async (req, res, next) => {
     const user = await userRepo.findByEmail(email)
 
     if (!user) {
-      console.log('!user')
+      //console.log('!user')
       return next(createError(404, 'Cannot find user !!'))
     }
 
@@ -21,7 +21,7 @@ const login = async (req, res, next) => {
     const match = await bcrypt.compare(password, user.password)
 
     if (!match) {
-      console.log('!match')
+      //console.log('!match')
       return next(createError(422, 'Check your password !!'))
     }
 
@@ -44,6 +44,14 @@ const login = async (req, res, next) => {
   }
 }
 
+const tokenTest = async (req, res, next) => {
+  try {
+    return response(res, req.user)
+  } catch (e) {
+    next(e)
+  }
+}
+
 export {
-  login
+  login, tokenTest
 }
