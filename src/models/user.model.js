@@ -1,4 +1,4 @@
-//'use strict'
+'use strict'
 
 import bcrypt from 'bcrypt'
 import { uuid } from '../utils/uuid'
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       type: 'BINARY(16)',
-      defaultValue: () => Buffer(uuid(), 'hex'),
+      defaultValue: () => Buffer.from(uuid(), 'hex'),
       get: function () {
         return Buffer.from(this.getDataValue('uuid')).toString('hex')
       }
@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     }
-  }, {
+  }, 
+  {
     tableName: 'users',
     timestamps: true,
   })

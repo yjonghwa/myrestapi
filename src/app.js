@@ -20,10 +20,15 @@ app.use(cookieParser())
 // get user from jwt before controller
 app.use(jwtMiddleware)
 
+// express는 route도 middleware로 처리한다
+// middleware는 순차적으로 처리되는 것을 기억한다
+
+// /routes/v1 디렉토리 안에 있는 모든 route를 로드한다
 app.use('/v1', v1Route)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
+  // next를 넣지 않으면 무한정 기다리게 된다
   next(createError(404))
 })
 

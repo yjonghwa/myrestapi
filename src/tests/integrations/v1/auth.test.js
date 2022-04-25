@@ -7,36 +7,41 @@ import models from '../../../models'
 import userRepo from '../../../repositories/user.repository'
 
 const app = require('../../../app')
-
+//let userRepo
+/*
+beforeAll(() => {
+  userRepo = new UserRepo()
+})
+*/
 afterAll(() => models.sequelize.close())
 
-describe('login test', () => {
+describe('Login Test', () => {
+  let userData
+  let token
 
-  let userData;
-  let token;
+  console.log('AUTH TEST START !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
+  console.log('Step 1 : create user');
 
   beforeAll(async () => {
     userData = {
       email: randomString() + '@test.com',
-      password:  randomString()
+      password: randomString()
     }
 
-    // create test user
+    // 테스트용 사용자 생성
     await userRepo.store(userData)
   })
 
-  test('login test here | 200', async () => {
+  console.log('Step 2 : login test');
+
+  test('Login Test | 200', async () => {
     let response = await request(app)
       .post('/v1/auth/login')
       .send({
         email: userData.email,
         password: userData.password
       })
-
-    token = response.body.data.token
-
-    expect(response.statusCode).toBe(200)
-    expect(response.body.data.token).toBeTruthy()
 
     expect(response.statusCode).toBe(200)
     expect(response.body.data.token).toBeTruthy()
@@ -46,11 +51,14 @@ describe('login test', () => {
 
     const user = await userRepo.find(payload.uuid)
     expect(userData.email).toBe(user.email)
-    
+
     console.log(payload)
+    token = response.body.data.token
   })
 
-  test('login test of not user | 404', async () => {
+  console.log('Step 2 : login test using non-user');
+
+  test('Login test using non-use | 404', async () => {
     let response = await request(app)
       .post('/v1/auth/login')
       .send({
@@ -60,10 +68,11 @@ describe('login test', () => {
 
     expect(response.statusCode).toBe(404)
     expect(response.body.data.message).toBe('Cannot find user !!')
-    //expect(response.body.message).toBe('Cannot find user !!')
   })
 
-  test('login test of wrong password | 404', async () => {
+  console.log('Step 3 : login test using wrong password');
+
+  test('Login test using wrong password | 422', async () => {
     let response = await request(app)
       .post('/v1/auth/login')
       .send({
@@ -73,16 +82,16 @@ describe('login test', () => {
 
     expect(response.statusCode).toBe(422)
     expect(response.body.data.message).toBe('Check your password !!')
-    //expect(response.body.message).toBe('Check your password !!')
   })
 
-  test('get user by token | 200', async () => {
+  console.log('Step 4 : get user by token');
+
+  test('GET User by token | 200', async () => {
     let response = await request(app)
       .get('/v1/auth/tokenTest')
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.body.data.email).toBe(userData.email)
-
-    console.log(reponse.body.data)
   })
+
 })

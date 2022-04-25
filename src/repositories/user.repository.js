@@ -7,7 +7,7 @@ export default {
   // read
   all: async () => await models.User.findAll(),
 
-  find: async (uuid) => await models.User.findOne({ where: { uuid: Buffer(uuid, 'hex') } }),
+  find: async (uuid) => await models.User.findOne({ where: { uuid: Buffer.from(uuid, 'hex') } }),
 
   findById: async (id) => await models.User.findByPk(id),
 
